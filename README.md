@@ -1,7 +1,7 @@
 # Coding Challenge for Zahra Iman
 -------------------------------
 
-The general structure of the solution is as following:
+##The general structure of the solution is as following:
 
 1. The blocking I/O is chosen for this solution.
 2. Per every client connection request, a requestHanlder is initiated and assigned (a separate thread).
@@ -14,22 +14,22 @@ The general structure of the solution is as following:
 
 This results in average of processing 2.8m numbers every 10 seconds on MacBook Pro, 3GHz Intel Core i7, 16GB ram.
 
-Notes:
+##Notes:
 
 I considered a few other designs:
-1. Have requestHandler thread to just deduplicate and write to a didicated buffer (per client). Then, have a separate thread per client to write from buffer into the file.
+1. Have requestHandler thread to just deduplicate and write to a dedicated buffer (per client). Then, have a separate thread per client to write from buffer into the file.
 	1.1. This resulted in lower performance around 800,000 numbers per 10 seconds
 2. Have requestHandler thread to just deduplicate and write to a global buffer (ConcurrentLinkedQueue). Then, have a separate thread (a single writer thread) to consume numbers from the global buffer and write to file.
 	2.1. This resulted in lower performance around 1.7m numbers per 10 seconds
 
 
-Assumptions:
+##Assumptions:
 
 1. The purpose of this application is not to scale up to tens of thousands of clients. The main architecture is based on the fact that the number of clients is very small. If the number of clients were going to be high, the java nio could have been the better choice.
 2. For better performance, a boolean array is the choice for resolving the duplication issue. Since we have 9 digits numbers, the combinations could be 000000000 to 999999999. Therefore, we could have only 1,000,000,000 number of combinations. The assumption is that we could fit a boolean array of this size (3,815 megabytes) in memory by increasing default heap size. This would remove the need for keeping some sort of database and hence improving performance. (Since Java uses an entire byte for each element in the boolean array, we will end up with using 3,815 megabytes of memory usage.)
+3. There is one instance of ServerSocket only. It calls a new thread (requestHandler) for each request it receives but we have only one instance of the main server.
 
-
-Running:
+##Running:
 
 1. The heapsize configuration I used is "-Xms512m -Xmx4g"
 2. The shadow jars can be created by gradle build
