@@ -2,6 +2,7 @@ package com.newrelic.codingchallenge;
 
 import com.newrelic.codingchallenge.server.RequestHandler;
 import com.newrelic.codingchallenge.server.SocketServer;
+import com.newrelic.codingchallenge.service.Deduplicator;
 import com.newrelic.codingchallenge.service.LogWriter;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,12 +29,31 @@ public class MainTest {
     protected ExecutorService threadPool = Executors.newFixedThreadPool(12);
 
 
+    //@Before
     public void setupServer() throws IOException {
         serverSocket = new SocketServer(port, logPath);
         serverSocket.startServer();
     }
 
+    @Test
+    public void deduplicatorRemovesDuplicatesCorrectly() throws IOException, InterruptedException {
+        (new FileWriter(new File(logPath).getAbsoluteFile(),false)).close();
+        Deduplicator deduplicator = new Deduplicator(logPath);
 
+        for(int d : getDigits()) {
+            deduplicator.deduplicateAndWriteLog(d);
+        }
+        deduplicator.gracefulShutdown();
+        List<Integer> digits = readLogFile(logPath);
+        int[] originalDigits = getDigits();
+        assertTrue(digits.size() == originalDigits.length - 3);
+        for(int d :originalDigits ) {
+            assertTrue(digits.contains(d));
+        }
+    }
+
+
+    //@Test
     public void deduplicatorOnlyPrintsUniqueDigits() throws IOException, InterruptedException {
         Socket clientSocket = connectToServer();
         RequestHandler mockedRh = mockRequestHandler(clientSocket);
@@ -64,7 +84,7 @@ public class MainTest {
         }
     }
 
-
+    //@Test
     public void terminateCausesGracefulShutdown() throws Exception {
         Socket clientSocket1 = connectToServer();
         RequestHandler mockedRh1 = mockRequestHandler(clientSocket1);
