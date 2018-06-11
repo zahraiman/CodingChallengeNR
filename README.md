@@ -1,8 +1,4 @@
-# coding-challenge
-
-Coding Challenge - Zahra Iman
-
-Coding Challenge for Zahra Iman
+# Coding Challenge for Zahra Iman
 -------------------------------
 
 The general structure of the solution is as following:
@@ -41,7 +37,7 @@ Running:
 3. If you want to run client, you can build the jar file for "Client" class as well
 	3.1. This will build coding-challenge-client-shadow.jar: Sample client main file to run 5 client connections and generate random numbers and send to server
 
-##==============================================================================================================
+##===========================================================================
 
 ## Starter build framework for the coding challenge
 
