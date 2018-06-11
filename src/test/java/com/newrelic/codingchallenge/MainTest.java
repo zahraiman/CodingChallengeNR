@@ -1,5 +1,5 @@
 package com.newrelic.codingchallenge;
-
+/*
 import com.newrelic.codingchallenge.server.RequestHandler;
 import com.newrelic.codingchallenge.server.SocketServer;
 import com.newrelic.codingchallenge.service.Deduplicator;
@@ -19,15 +19,14 @@ import java.util.concurrent.Executors;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by zahraiman on 6/10/18.
- */
+
+// * Created by zahraiman on 6/10/18.
+
 public class MainTest {
     private static int port = 4000;
     private static String logPath = "src/test/numbers-test.log";
     private static SocketServer serverSocket;
     protected ExecutorService threadPool = Executors.newFixedThreadPool(12);
-
 
     //@Before
     public void setupServer() throws IOException {
@@ -188,3 +187,4 @@ public class MainTest {
         return rh;
     }
 }
+*/
